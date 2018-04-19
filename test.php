@@ -1,6 +1,12 @@
 <?php
 $file_list = glob('server/*.json');
 $test = [];
+if (!isset(glob('server/*.json')[$_GET['test']])) { // если нет теста - 404
+    header('HTTP/1.0 404 Not Found');
+    echo "<h2>404 Not Found</h2>";
+    exit;
+}
+
 foreach ($file_list as $key => $file) {
     if ($key == $_GET['test']) {  // в параметре гет номер теста который декодим
         $file_test = file_get_contents($file_list[$key]);
