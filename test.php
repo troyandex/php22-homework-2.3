@@ -4,6 +4,7 @@ $test = [];
 if (!isset(glob('server/*.json')[$_GET['test']])) { // если нет теста - 404
     header('HTTP/1.0 404 Not Found');
     echo "<h2>404 Not Found</h2>";
+    echo "<h2>error - wrong test number</h2>";
     exit;
 }
 
