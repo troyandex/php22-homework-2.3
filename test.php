@@ -16,24 +16,13 @@ foreach ($file_list as $key => $file) {
     }
 }
 $questions = $test['questions']; // масив из вопросов с ответами выбраного (по гет) теста
-$result_true_array = array(); // обьявляем масив с верными ответами в исходном тесте
-
-echo "<pre>"; // смотрю что в массивах пост и верные
-    echo "Выбрал пользователь: <br>";
-    print_r($_POST);
-    echo "<br>Верные ответы: <br>";
-    $correct_arr[0] = "test";
-    print_r($correct_arr);
-echo "</pre>";
-
-
 ?>
 
 <!DOCTYPE html>
 <html lang="ru">
 
 <head>
-    <title>2.2 «Обработка форм» - Тест </title>
+    <title> Тест </title>
     <meta charset="UTF-8">
     <style>
         .container { max-width: 950px; margin: 0 auto; }
@@ -45,48 +34,95 @@ echo "</pre>";
 </head>
 
 <body>
-<div>
-    <div class="container">
-        <h2>Меню:</h2>
-        <ul>
-            <li><a href="admin.php">Форма загрузки тестов</a></li>
-            <li><a href="list.php">Список тестов</a></li>
-        </ul>
+<div class="container">
+    <h2>Меню:</h2>
+    <ul>
+        <li><a href="admin.php">Форма загрузки тестов</a></li>
+        <li><a href="list.php">Список тестов</a></li>
+    </ul>
 
-        <h2>Тест: <?=$test['title']?></h2>
-        <form method="post">
-            <fieldset>
-                <?php
+    <h2>Тест: <?=$test['title']?></h2>
+    <form method="post">
+        <fieldset>
+            <p>Введите ваше имя: <input type="text" name="name"></p>
+            <?php
+            echo "<br><pre>";
+            print_r($_POST);
+            echo "<br></pre>";
 
-                foreach ($questions as $key1 => $number) :  // для каждого вопроса по порядку
-                    $question = $number['question'];// массив с вопросами
-                    $answers = $number['answers']; // массив с ответами
+            // кол-во ответов:
+            $post_true = 0; // верно пользователь
+            $post_false = 0; // ошибочно пользователь
+            $result_true = 0; // должно быть верных
 
-                    echo "<h4>Вопрос: $question</h4>"; // выводим вопрос
-                    foreach ($answers as $key2 => $option) : // выводим каждый ответ и собираем правильные
-
-                        if ($option['result'] ===  true) {
-                            $index = "$key1-$key2";
-                            global $correct_arr;
-                            $correct_arr[$index] = $option['answer'] ; // если верен - добавляем к массиву
-                        }
-                        ?>
-                        <label class="answer">
-                            <!-- $key1 - вопрос, $key2 - ответ, -->
-                            <input type="checkbox" name="<?php echo $key1 . "-" . $key2;?>" value="<?=$option['answer'];?>">
-                            <?=$option['answer'];?>
-                        </label>
-
-                    <?php
-                    endforeach; // заканчиваем цикл с выводом всех и подсчетом верных ответов
-                endforeach;
+            foreach ($questions as $key1 => $number) : // для каждого вопроса по порядку
+                $question = $number['question']; // массив с вопросами
+                $answers[] = $number['answers']; // массив с ответами
                 ?>
-                <br>
-                <input class="button" type="submit" value="Отправить">
-            </fieldset>
-        </form>
+                <h4>Вопрос: <?=$question;?></h4>
+                <?php
+                foreach ($answers[$key1] as $key2 => $item) :
+                    if ($item['result'] === true) {
+                        $result_true++; // плюсуем количество верных ответов
+                    };
 
-    </div>
+                    if (count($_POST) > 0) { // если есть пост - проверяем
+                        $answers_key = "$key1-$key2"; // ключ текущего ответа для сверки
+                        $name = $_POST['name'];
+                        if (isset($_POST[$answers_key])) { // если есть пост с таким же как вопрос индексом
+                            global $selected;
+                            $selected = "checked";
+                            if ($item['result'] === true) { // и он верный
+                                $post_true++; // плюсуем верно
+                            } else {
+                                $post_false++; // иначе плюсуем ошибку
+                            }
+                        } else {
+                            $selected = "";
+                        }
+                    } else {
+                        $selected = "";
+                    };
+                    ?>
+                    <label class="answer">
+                        <input type="checkbox" name="<?php echo $key1."-".$key2;?>" value="<?php echo $key1."-".$key2;?>" <?=$selected?>>
+                        <?=$item['answer'];?>
+                    </label>
+                <?php
+                endforeach; // конец обработки вопроса
+                ?>
+
+            <?php
+            endforeach;
+
+            // Сравниваем и выводим результат
+            //            echo "<br>";
+            //            echo "<br> post_true = " . $post_true . "<br>";
+            //            echo "<br> post_false =" . $post_false . "<br>";
+            //            echo "<br> result_true = " . $result_true . "<br>";
+
+            // если есть ответы - выводим результат
+            if (count($_POST) > 0) {
+                if ($post_true === $result_true && $post_false === 0) {
+                    echo '<h4>Результат: Правильно!</h4>';
+                    $result = "Тест пройден";
+
+                }elseif ($post_true > 0 && $post_false > 0) {
+                    echo '<h4>Результат: Почти угадали (попробуйте еще)</h4>';
+                    $result = "Тест почти пройден";
+                }else{
+                    echo '<h4>Результат: Совсем не то</h4>';
+                    $result = "Тест не пройден";
+                }
+                // через 5 секунды редирект на сертификат
+                echo "Сейчас вы будете перенаправлены на страницу с сертификатом по итогам теста (5 сек)";
+                $title = $test['title'];
+                header("refresh:5; url=certificate.php?name=$name&post_true=$post_true&post_false=$post_false&result_true=$result_true&title=$title&result=$result");
+            }
+            ?>
+        </fieldset>
+        <input class="button" type="submit" value="Отправить">
+    </form>
+
 </div>
 </body>
-</html>
