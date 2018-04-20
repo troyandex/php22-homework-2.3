@@ -22,7 +22,7 @@ $questions = $test['questions']; // масив из вопросов с отве
 <html lang="ru">
 
 <head>
-    <title> Тест </title>
+    <title>Тест: <?=$test['title']?></title>
     <meta charset="UTF-8">
     <style>
         .container { max-width: 950px; margin: 0 auto; }

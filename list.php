@@ -7,7 +7,7 @@ $file_list = glob('server/*.json');
 <html lang="ru">
 
 <head>
-    <title>2.2 «Обработка форм» - Список тестов</title>
+    <title>Список тестов</title>
     <meta charset="UTF-8">
     <style>
         .container { max-width: 950px; margin: 0 auto; }

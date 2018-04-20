@@ -2,7 +2,7 @@
 <html lang="ru">
 
 <head>
-    <title>2.2 «Обработка форм» - Форма загрузки</title>
+    <title>Форма загрузки</title>
     <meta charset="UTF-8">
     <style>
         .container { max-width: 950px; margin: 0 auto; }
