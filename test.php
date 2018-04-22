@@ -30,6 +30,7 @@ $questions = $test['questions']; // масив из вопросов с отве
         li {margin: 3px 0;}
         .button {margin: 15px;}
         .answer:hover {text-decoration: underline;}
+        img {margin 5px auto}
     </style>
 </head>
 
@@ -46,9 +47,9 @@ $questions = $test['questions']; // масив из вопросов с отве
         <fieldset>
             <p>Введите ваше имя: <input type="text" name="name"></p>
             <?php
-            echo "<br><pre>";
-            print_r($_POST);
-            echo "<br></pre>";
+//            echo "<br><pre>";
+//            print_r($_POST);
+//            echo "<br></pre>";
 
             // кол-во ответов:
             $post_true = 0; // верно пользователь
@@ -95,12 +96,6 @@ $questions = $test['questions']; // масив из вопросов с отве
             <?php
             endforeach;
 
-            // Сравниваем и выводим результат
-            //            echo "<br>";
-            //            echo "<br> post_true = " . $post_true . "<br>";
-            //            echo "<br> post_false =" . $post_false . "<br>";
-            //            echo "<br> result_true = " . $result_true . "<br>";
-
             // если есть ответы - выводим результат
             if (count($_POST) > 0) {
                 if ($post_true === $result_true && $post_false === 0) {
@@ -115,9 +110,11 @@ $questions = $test['questions']; // масив из вопросов с отве
                     $result = "Тест не пройден";
                 }
                 // через 5 секунды редирект на сертификат
-                echo "Сейчас вы будете перенаправлены на страницу с сертификатом по итогам теста (5 сек)";
+                echo "Благодарим за уделенное время. <br> Сертификат по итогам теста: <br>";
                 $title = $test['title'];
-                header("refresh:5; url=certificate.php?name=$name&post_true=$post_true&post_false=$post_false&result_true=$result_true&title=$title&result=$result");
+                echo '<img src="certificate.php?name=123&title=$title&result=10" alt="Сертификат">';
+
+                // header("refresh:5; url=certificate.php?name=$name&post_true=$post_true&post_false=$post_false&result_true=$result_true&title=$title&result=$result");
             }
             ?>
         </fieldset>
