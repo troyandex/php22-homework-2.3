@@ -112,8 +112,7 @@ $title = $test['title'];
                 }
                 // через 5 секунды редирект на сертификат
                 echo "Благодарим за уделенное время. <br> Сертификат по итогам теста: <br>";
-                global $title;
-                echo '<img src="certificate.php?name=$name&title=$title&result=$result" alt="Сертификат">';
+                echo "<img src=\"certificate.php?name=$name&title=$title&result=$result\" alt=\"Сертификат\">";
             }
             ?>
         </fieldset>
