@@ -16,6 +16,7 @@ foreach ($file_list as $key => $file) {
     }
 }
 $questions = $test['questions']; // масив из вопросов с ответами выбраного (по гет) теста
+$title = $test['title'];
 ?>
 
 <!DOCTYPE html>
@@ -111,10 +112,8 @@ $questions = $test['questions']; // масив из вопросов с отве
                 }
                 // через 5 секунды редирект на сертификат
                 echo "Благодарим за уделенное время. <br> Сертификат по итогам теста: <br>";
-                $title = $test['title'];
-                echo '<img src="certificate.php?name=123&title=$title&result=10" alt="Сертификат">';
-
-                // header("refresh:5; url=certificate.php?name=$name&post_true=$post_true&post_false=$post_false&result_true=$result_true&title=$title&result=$result");
+                global $title;
+                echo '<img src="certificate.php?name=$name&title=$title&result=$result" alt="Сертификат">';
             }
             ?>
         </fieldset>
