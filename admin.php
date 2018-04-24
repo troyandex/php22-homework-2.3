@@ -33,13 +33,17 @@
                     $server = 'server/';
                     $path_info = pathinfo($server . $file_name);
 
-                    if ($path_info['extension'] === 'json') {
-                        move_uploaded_file($tmp_file, $server .$file_name);
-                        header('refresh:5; url=list.php'); // через 5 секунды редирект на файл лист
-                        echo "<strong>Тест успешно загружен на сервер</strong><br>";
-                        echo "<strong>Вы будете переведены на список тестов через 5 секунд</strong>";
-                        exit;
-                    }else {
+                    if ($path_info['extension'] === 'json')
+                    {
+                        if (move_uploaded_file($tmp_file, $server .$file_name)) // проверка что файл успешно загружен
+                        {
+                            header('refresh:5; url=list.php'); // через 5 секунды редирект на файл лист
+                            echo "<strong>Тест успешно загружен на сервер</strong><br>";
+                            echo "<strong>Вы будете переведены на список тестов через 5 секунд</strong>";
+                            exit;
+                        }
+                    }else
+                    {
                         echo "<strong>Неверный формат (нужен .json)</strong>";
                     };
                 } else {
